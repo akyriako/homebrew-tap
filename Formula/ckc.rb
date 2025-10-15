@@ -1,4 +1,4 @@
-class ckc < Formula
+class Ckc < Formula
   desc "Create a kind cluster and bootstrap Helm charts"
   homepage "https://git.rhynosaur.com/akyriako/ckc"
   url "https://git.rhynosaur.com/akyriako/ckc/archive/v0.1.0.tar.gz"
