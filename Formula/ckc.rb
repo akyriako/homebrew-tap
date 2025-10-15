@@ -5,21 +5,22 @@ class Ckc < Formula
   sha256 "73342414775eee76e4edf07ffee5881110ddafbe6afc59f4a8237744c7c7d52c"
   license "MIT"
 
-  depends_on "kind"
-  depends_on "helm"
-  depends_on "kubernetes-cli" # kubectl
-  # depends_on "bash" => :run  # uncomment if your script needs Bash 4+ on macOS
+  depends_on "bash" => :run           # Modern Bash (5.x)
+  depends_on "kind"                   # Kubernetes-in-Docker
+  depends_on "helm"                   # Helm package manager
+  depends_on "kubernetes-cli"         # kubectl
 
   def install
-    # Install bundled config(s)
+    inreplace "create-cluster-bundle.sh",
+              %r{^#!.*bash$},
+              "#!#{Formula["bash"].opt_bin}/bash"
+
     pkgshare.install "multinode-kind-cluster.yaml"
 
-    # Make the default config path stable inside the keg
     inreplace "create-cluster-bundle.sh",
               'KIND_CONFIG="multinode-kind-cluster.yaml"',
               "KIND_CONFIG=\"#{pkgshare}/multinode-kind-cluster.yaml\""
 
-    # Install the main script as `ckc`
     bin.install "create-cluster-bundle.sh" => "ckc"
   end
 
